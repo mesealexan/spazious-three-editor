@@ -4,13 +4,13 @@ import { JSZip } from '../../examples/jsm/libs/jszip.module.min.js';
 
 import { UIPanel, UIRow, UIHorizontalRule } from './libs/ui.js';
 
-function MenubarFile( editor ) {
+function MenubarFile(editor) {
 
-	function parseNumber( key, value ) {
+	function parseNumber(key, value) {
 
-		var precision = config.getKey( 'exportPrecision' );
+		var precision = config.getKey('exportPrecision');
 
-		return typeof value === 'number' ? parseFloat( value.toFixed( precision ) ) : value;
+		return typeof value === 'number' ? parseFloat(value.toFixed(precision)) : value;
 
 	}
 
@@ -20,89 +20,89 @@ function MenubarFile( editor ) {
 	var strings = editor.strings;
 
 	var container = new UIPanel();
-	container.setClass( 'menu' );
+	container.setClass('menu');
 
 	var title = new UIPanel();
-	title.setClass( 'title' );
-	title.setTextContent( strings.getKey( 'menubar/file' ) );
-	container.add( title );
+	title.setClass('title');
+	title.setTextContent(strings.getKey('menubar/file'));
+	container.add(title);
 
 	var options = new UIPanel();
-	options.setClass( 'options' );
-	container.add( options );
+	options.setClass('options');
+	container.add(options);
 
 	// New
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/new' ) );
-	option.onClick( function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/new'));
+	option.onClick(function () {
 
-		if ( confirm( 'Any unsaved data will be lost. Are you sure?' ) ) {
+		if (confirm('Any unsaved data will be lost. Are you sure?')) {
 
 			editor.clear();
 
 		}
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	//
 
-	options.add( new UIHorizontalRule() );
+	options.add(new UIHorizontalRule());
 
 	// Import
 
-	var form = document.createElement( 'form' );
+	var form = document.createElement('form');
 	form.style.display = 'none';
-	document.body.appendChild( form );
+	document.body.appendChild(form);
 
-	var fileInput = document.createElement( 'input' );
+	var fileInput = document.createElement('input');
 	fileInput.multiple = true;
 	fileInput.type = 'file';
-	fileInput.addEventListener( 'change', function () {
+	fileInput.addEventListener('change', function () {
 
-		editor.loader.loadFiles( fileInput.files );
+		editor.loader.loadFiles(fileInput.files);
 		form.reset();
 
-	} );
-	form.appendChild( fileInput );
+	});
+	form.appendChild(fileInput);
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/import' ) );
-	option.onClick( function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/import'));
+	option.onClick(function () {
 
 		fileInput.click();
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	//
 
-	options.add( new UIHorizontalRule() );
+	options.add(new UIHorizontalRule());
 
 	// Export Geometry
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/geometry' ) );
-	option.onClick( function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/geometry'));
+	option.onClick(function () {
 
 		var object = editor.selected;
 
-		if ( object === null ) {
+		if (object === null) {
 
-			alert( 'No object selected.' );
+			alert('No object selected.');
 			return;
 
 		}
 
 		var geometry = object.geometry;
 
-		if ( geometry === undefined ) {
+		if (geometry === undefined) {
 
-			alert( 'The selected object doesn\'t have geometry.' );
+			alert('The selected object doesn\'t have geometry.');
 			return;
 
 		}
@@ -111,32 +111,32 @@ function MenubarFile( editor ) {
 
 		try {
 
-			output = JSON.stringify( output, parseNumber, '\t' );
-			output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+			output = JSON.stringify(output, parseNumber, '\t');
+			output = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
 
-		} catch ( e ) {
+		} catch (e) {
 
-			output = JSON.stringify( output );
+			output = JSON.stringify(output);
 
 		}
 
-		saveString( output, 'geometry.json' );
+		saveString(output, 'geometry.json');
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	// Export Object
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/object' ) );
-	option.onClick( function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/object'));
+	option.onClick(function () {
 
 		var object = editor.selected;
 
-		if ( object === null ) {
+		if (object === null) {
 
-			alert( 'No object selected' );
+			alert('No object selected');
 			return;
 
 		}
@@ -145,250 +145,264 @@ function MenubarFile( editor ) {
 
 		try {
 
-			output = JSON.stringify( output, parseNumber, '\t' );
-			output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+			output = JSON.stringify(output, parseNumber, '\t');
+			output = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
 
-		} catch ( e ) {
+		} catch (e) {
 
-			output = JSON.stringify( output );
+			output = JSON.stringify(output);
 
 		}
 
-		saveString( output, 'model.json' );
+		saveString(output, 'model.json');
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	// Export Scene
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/scene' ) );
-	option.onClick( function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/scene'));
+	option.onClick(function () {
 
 		var output = editor.scene.toJSON();
 
 		try {
 
-			output = JSON.stringify( output, parseNumber, '\t' );
-			output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+			output = JSON.stringify(output, parseNumber, '\t');
+			output = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
 
-		} catch ( e ) {
+		} catch (e) {
 
-			output = JSON.stringify( output );
+			output = JSON.stringify(output);
 
 		}
 
-		saveString( output, 'scene.json' );
+		saveString(output, 'scene.json');
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	//
 
-	options.add( new UIHorizontalRule() );
+	options.add(new UIHorizontalRule());
 
 	// Export DAE
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/dae' ) );
-	option.onClick( async function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/dae'));
+	option.onClick(async function () {
 
-		var { ColladaExporter } = await import( '../../examples/jsm/exporters/ColladaExporter.js' );
+		var { ColladaExporter } = await import('../../examples/jsm/exporters/ColladaExporter.js');
 
 		var exporter = new ColladaExporter();
 
-		exporter.parse( editor.scene, function ( result ) {
+		exporter.parse(editor.scene, function (result) {
 
-			saveString( result.data, 'scene.dae' );
+			saveString(result.data, 'scene.dae');
 
-		} );
+		});
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	// Export DRC
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/drc' ) );
-	option.onClick( async function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/drc'));
+	option.onClick(async function () {
 
 		var object = editor.selected;
 
-		if ( object === null || object.isMesh === undefined ) {
+		if (object === null || object.isMesh === undefined) {
 
-			alert( 'No mesh selected' );
+			alert('No mesh selected');
 			return;
 
 		}
 
-		var { DRACOExporter } = await import( '../../examples/jsm/exporters/DRACOExporter.js' );
+		var { DRACOExporter } = await import('../../examples/jsm/exporters/DRACOExporter.js');
 
 		var exporter = new DRACOExporter();
 
 		// TODO: Change to DRACOExporter's parse( geometry, onParse )?
-		var result = exporter.parse( object );
-		saveArrayBuffer( result, 'model.drc' );
+		var result = exporter.parse(object);
+		saveArrayBuffer(result, 'model.drc');
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	// Export GLB
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/glb' ) );
-	option.onClick( async function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/glb'));
+	option.onClick(async function () {
 
 		var scene = editor.scene;
-		var animations = getAnimations( scene );
+		var animations = getAnimations(scene);
 
-		var { GLTFExporter } = await import( '../../examples/jsm/exporters/GLTFExporter.js' );
+		var { GLTFExporter } = await import('../../examples/jsm/exporters/GLTFExporter.js');
 
 		var exporter = new GLTFExporter();
 
-		exporter.parse( scene, function ( result ) {
+		exporter.parse(scene, function (result) {
 
-			saveArrayBuffer( result, 'scene.glb' );
+			saveArrayBuffer(result, 'scene.glb');
 
-		}, { binary: true, animations: animations } );
+		}, { binary: true, animations: animations });
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	// Export GLTF
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/gltf' ) );
-	option.onClick( async function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/gltf'));
+	option.onClick(async function () {
 
 		var scene = editor.scene;
-		var animations = getAnimations( scene );
+		var animations = getAnimations(scene);
 
-		var { GLTFExporter } = await import( '../../examples/jsm/exporters/GLTFExporter.js' );
+		var { GLTFExporter } = await import('../../examples/jsm/exporters/GLTFExporter.js');
+		const gltfExporter = new GLTFExporter()
+		const options = {
+			binary: false,
+			trs: false,
+			onlyVisible: true,
+			truncateDrawRange: true,
+			embedImages: false,
+			maxTextureSize: Infinity,
+			animations: [],
+			includeCustomExtensions: false,
+		}
+		gltfExporter.parse(
+			scene,
+			function (result) {
+				saveStringGLTF('meetingroom.gltf', scene)
+			},
+			function (error) {
+				console.log('An error happened during parsing', error)
+			},
+			//@ts-ignore
+			options
+		)
 
-		var exporter = new GLTFExporter();
 
-		exporter.parse( scene, function ( result ) {
-
-			saveString( JSON.stringify( result, null, 2 ), 'scene.gltf' );
-
-		}, { animations: animations } );
-
-
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	// Export OBJ
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/obj' ) );
-	option.onClick( async function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/obj'));
+	option.onClick(async function () {
 
 		var object = editor.selected;
 
-		if ( object === null ) {
+		if (object === null) {
 
-			alert( 'No object selected.' );
+			alert('No object selected.');
 			return;
 
 		}
 
-		var { OBJExporter } = await import( '../../examples/jsm/exporters/OBJExporter.js' );
+		var { OBJExporter } = await import('../../examples/jsm/exporters/OBJExporter.js');
 
 		var exporter = new OBJExporter();
 
-		saveString( exporter.parse( object ), 'model.obj' );
+		saveString(exporter.parse(object), 'model.obj');
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	// Export PLY (ASCII)
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/ply' ) );
-	option.onClick( async function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/ply'));
+	option.onClick(async function () {
 
-		var { PLYExporter } = await import( '../../examples/jsm/exporters/PLYExporter.js' );
+		var { PLYExporter } = await import('../../examples/jsm/exporters/PLYExporter.js');
 
 		var exporter = new PLYExporter();
 
-		exporter.parse( editor.scene, function ( result ) {
+		exporter.parse(editor.scene, function (result) {
 
-			saveArrayBuffer( result, 'model.ply' );
+			saveArrayBuffer(result, 'model.ply');
 
-		} );
+		});
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	// Export PLY (Binary)
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/ply_binary' ) );
-	option.onClick( async function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/ply_binary'));
+	option.onClick(async function () {
 
-		var { PLYExporter } = await import( '../../examples/jsm/exporters/PLYExporter.js' );
+		var { PLYExporter } = await import('../../examples/jsm/exporters/PLYExporter.js');
 
 		var exporter = new PLYExporter();
 
-		exporter.parse( editor.scene, function ( result ) {
+		exporter.parse(editor.scene, function (result) {
 
-			saveArrayBuffer( result, 'model-binary.ply' );
+			saveArrayBuffer(result, 'model-binary.ply');
 
-		}, { binary: true } );
+		}, { binary: true });
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	// Export STL (ASCII)
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/stl' ) );
-	option.onClick( async function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/stl'));
+	option.onClick(async function () {
 
-		var { STLExporter } = await import( '../../examples/jsm/exporters/STLExporter.js' );
+		var { STLExporter } = await import('../../examples/jsm/exporters/STLExporter.js');
 
 		var exporter = new STLExporter();
 
-		saveString( exporter.parse( editor.scene ), 'model.stl' );
+		saveString(exporter.parse(editor.scene), 'model.stl');
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	// Export STL (Binary)
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/stl_binary' ) );
-	option.onClick( async function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/export/stl_binary'));
+	option.onClick(async function () {
 
-		var { STLExporter } = await import( '../../examples/jsm/exporters/STLExporter.js' );
+		var { STLExporter } = await import('../../examples/jsm/exporters/STLExporter.js');
 
 		var exporter = new STLExporter();
 
-		saveArrayBuffer( exporter.parse( editor.scene, { binary: true } ), 'model-binary.stl' );
+		saveArrayBuffer(exporter.parse(editor.scene, { binary: true }), 'model-binary.stl');
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	//
 
-	options.add( new UIHorizontalRule() );
+	options.add(new UIHorizontalRule());
 
 	// Publish
 
 	var option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/publish' ) );
-	option.onClick( function () {
+	option.setClass('option');
+	option.setTextContent(strings.getKey('menubar/file/publish'));
+	option.onClick(function () {
 
 		var zip = new JSZip();
 
@@ -398,33 +412,33 @@ function MenubarFile( editor ) {
 		output.metadata.type = 'App';
 		delete output.history;
 
-		output = JSON.stringify( output, parseNumber, '\t' );
-		output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+		output = JSON.stringify(output, parseNumber, '\t');
+		output = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
 
-		zip.file( 'app.json', output );
+		zip.file('app.json', output);
 
 		//
 
-		var title = config.getKey( 'project/title' );
+		var title = config.getKey('project/title');
 
-		var manager = new THREE.LoadingManager( function () {
+		var manager = new THREE.LoadingManager(function () {
 
-			save( zip.generate( { type: 'blob' } ), ( title !== '' ? title : 'untitled' ) + '.zip' );
+			save(zip.generate({ type: 'blob' }), (title !== '' ? title : 'untitled') + '.zip');
 
-		} );
+		});
 
-		var loader = new THREE.FileLoader( manager );
-		loader.load( 'js/libs/app/index.html', function ( content ) {
+		var loader = new THREE.FileLoader(manager);
+		loader.load('js/libs/app/index.html', function (content) {
 
-			content = content.replace( '<!-- title -->', title );
+			content = content.replace('<!-- title -->', title);
 
 			var includes = [];
 
-			content = content.replace( '<!-- includes -->', includes.join( '\n\t\t' ) );
+			content = content.replace('<!-- includes -->', includes.join('\n\t\t'));
 
 			var editButton = '';
 
-			if ( config.getKey( 'project/editable' ) ) {
+			if (config.getKey('project/editable')) {
 
 				editButton = [
 					'',
@@ -435,75 +449,105 @@ function MenubarFile( editor ) {
 					'			button.textContent = \'EDIT\';',
 					'			document.body.appendChild( button );',
 					''
-				].join( '\n' );
+				].join('\n');
 
 			}
 
-			content = content.replace( '\n\t\t\t/* edit button */\n', editButton );
+			content = content.replace('\n\t\t\t/* edit button */\n', editButton);
 
-			zip.file( 'index.html', content );
+			zip.file('index.html', content);
 
-		} );
-		loader.load( 'js/libs/app.js', function ( content ) {
+		});
+		loader.load('js/libs/app.js', function (content) {
 
-			zip.file( 'js/app.js', content );
+			zip.file('js/app.js', content);
 
-		} );
-		loader.load( '../build/three.module.js', function ( content ) {
+		});
+		loader.load('../build/three.module.js', function (content) {
 
-			zip.file( 'js/three.module.js', content );
+			zip.file('js/three.module.js', content);
 
-		} );
-		loader.load( '../examples/jsm/webxr/VRButton.js', function ( content ) {
+		});
+		loader.load('../examples/jsm/webxr/VRButton.js', function (content) {
 
-			zip.file( 'js/VRButton.js', content );
+			zip.file('js/VRButton.js', content);
 
-		} );
+		});
 
-	} );
-	options.add( option );
+	});
+	options.add(option);
 
 	//
 
-	var link = document.createElement( 'a' );
-	function save( blob, filename ) {
+	var link = document.createElement('a');
+	function save(blob, filename) {
 
-		link.href = URL.createObjectURL( blob );
+		link.href = URL.createObjectURL(blob);
 		link.download = filename || 'data.json';
-		link.dispatchEvent( new MouseEvent( 'click' ) );
+		link.dispatchEvent(new MouseEvent('click'));
 
 		// URL.revokeObjectURL( url ); breaks Firefox...
 
 	}
 
-	function saveArrayBuffer( buffer, filename ) {
+	function saveArrayBuffer(buffer, filename) {
 
-		save( new Blob( [ buffer ], { type: 'application/octet-stream' } ), filename );
-
-	}
-
-	function saveString( text, filename ) {
-
-		save( new Blob( [ text ], { type: 'text/plain' } ), filename );
+		save(new Blob([buffer], { type: 'application/octet-stream' }), filename);
 
 	}
 
-	function getAnimations( scene ) {
+	function saveString(text, filename) {
+
+		save(new Blob([text], { type: 'text/plain' }), filename);
+
+	}
+
+	function getAnimations(scene) {
 
 		var animations = [];
 
-		scene.traverse( function ( object ) {
+		scene.traverse(function (object) {
 
-			animations.push( ... object.animations );
+			animations.push(...object.animations);
 
-		} );
+		});
 
 		return animations;
 
 	}
 
+	function saveStringGLTF(filename, scene) {
+		for (let i = 0; i < scene.children[0].children.length; i++) {
+			for (let j = 0; j < window.gltfFile.nodes.length; j++) {
+				if (scene.children[0].children[i].name == window.gltfFile.nodes[j].name) {
+					window.gltfFile.nodes[j]["translation"] = [scene.children[0].children[i].position.x, scene.children[0].children[i].position.y, scene.children[0].children[i].position.z]
+					window.gltfFile.nodes[j]["rotation"] = [scene.children[0].children[i].quaternion.x, scene.children[0].children[i].quaternion.y, scene.children[0].children[i].quaternion.z, scene.children[0].children[i].quaternion.w]
+					window.gltfFile.nodes[j]["scale"] = [scene.children[0].children[i].scale.x, scene.children[0].children[i].scale.y, scene.children[0].children[i].scale.z]
+				}
+			}
+		}
+
+
+		const output = JSON.stringify(window.gltfFile, null, 2)
+		saveGLTF(new Blob([output], { type: 'text/plain' }), filename)
+	}
+
+	function saveGLTF(blob, filename) {
+		const link = document.createElement('a')
+		link.style.display = 'none'
+		document.body.appendChild(link)
+		link.href = URL.createObjectURL(blob)
+		link.download = filename
+		link.click()
+
+		// URL.revokeObjectURL( url ); breaks Firefox...
+	}
+
+
 	return container;
 
 }
+
+
 
 export { MenubarFile };

@@ -26,7 +26,6 @@ function Loader(editor) {
 	};
 
 	this.loadFiles = function (files, filesMap) {
-
 		if (files.length > 0) {
 
 			var filesMap = filesMap || LoaderUtils.createFilesMap(files);
@@ -66,7 +65,6 @@ function Loader(editor) {
 
 		var filename = file.name;
 		var extension = filename.split('.').pop().toLowerCase();
-
 		var reader = new FileReader();
 		reader.addEventListener('progress', function (event) {
 
@@ -257,11 +255,9 @@ function Loader(editor) {
 				break;
 
 			case 'gltf':
-
 				reader.addEventListener('load', async function (event) {
 
 					var contents = event.target.result;
-
 					var loader;
 
 					if (isGLTF1(contents)) {
@@ -282,7 +278,7 @@ function Loader(editor) {
 					}
 
 					loader.parse(contents, '', function (result) {
-
+						window.gltfFile = result.parser.json
 						var scene = result.scene;
 						scene.traverse((child) => {
 							if (child.material) {
@@ -641,7 +637,6 @@ function Loader(editor) {
 	};
 
 	function handleJSON(data) {
-
 		if (data.metadata === undefined) { // 2.0
 
 			data.metadata = { type: 'Geometry' };

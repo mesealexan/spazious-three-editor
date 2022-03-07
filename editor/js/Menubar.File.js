@@ -283,7 +283,7 @@ function MenubarFile(editor) {
 		gltfExporter.parse(
 			scene,
 			function (result) {
-				saveStringGLTF('meetingroom.gltf', scene)
+				saveStringGLTF('meetingroom.gltf', scene, result)
 			},
 			function (error) {
 				console.log('An error happened during parsing', error)
@@ -516,7 +516,9 @@ function MenubarFile(editor) {
 
 	}
 
-	function saveStringGLTF(filename, scene) {
+	function saveStringGLTF(filename, scene, exportedGLTF) {
+		console.log(exportedGLTF, window.gltfFile)
+		// Objects position map
 		for (let i = 0; i < scene.children[0].children.length; i++) {
 			for (let j = 0; j < window.gltfFile.nodes.length; j++) {
 				if (scene.children[0].children[i].name == window.gltfFile.nodes[j].name) {
@@ -526,7 +528,18 @@ function MenubarFile(editor) {
 				}
 			}
 		}
-
+		// Material properties map
+		for (let i = 0; i < exportedGLTF.materials.length; i++) {
+			for (let j = 0; j < window.gltfFile.materials.length; j++) {
+				if(exportedGLTF.materials[i].name === window.gltfFile.materials.name){
+					if(window.gltfFile.materials[j]['pbrMetallicRoughness']){
+						window.gltfFile.materials[j]['pbrMetallicRoughness']['metallicFactor'] = exportedGLTF.materials[i]['pbrMetallicRoughness']['metallicFactor']
+						window.gltfFile.materials[j]['pbrMetallicRoughness']['roughnessFactor'] = exportedGLTF.materials[i]['pbrMetallicRoughness']['roughnessFactor']
+					}
+					
+				}
+			}
+		}
 
 		const output = JSON.stringify(window.gltfFile, null, 2)
 		saveGLTF(new Blob([output], { type: 'text/plain' }), filename)

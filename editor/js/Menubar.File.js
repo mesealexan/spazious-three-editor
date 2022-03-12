@@ -517,7 +517,7 @@ function MenubarFile(editor) {
 	}
 
 	function saveStringGLTF(filename, scene, exportedGLTF) {
-		console.log(exportedGLTF, window.gltfFile)
+		console.log(exportedGLTF, window.gltfFile, scene)
 		// Objects position map
 		for (let i = 0; i < scene.children[0].children.length; i++) {
 			for (let j = 0; j < window.gltfFile.nodes.length; j++) {
@@ -531,12 +531,20 @@ function MenubarFile(editor) {
 		// Material properties map
 		for (let i = 0; i < exportedGLTF.materials.length; i++) {
 			for (let j = 0; j < window.gltfFile.materials.length; j++) {
-				if(exportedGLTF.materials[i].name === window.gltfFile.materials.name){
-					if(window.gltfFile.materials[j]['pbrMetallicRoughness']){
+				try{
+					if(exportedGLTF.materials[i].name === window.gltfFile.materials[j].name){
 						window.gltfFile.materials[j]['pbrMetallicRoughness']['metallicFactor'] = exportedGLTF.materials[i]['pbrMetallicRoughness']['metallicFactor']
-						window.gltfFile.materials[j]['pbrMetallicRoughness']['roughnessFactor'] = exportedGLTF.materials[i]['pbrMetallicRoughness']['roughnessFactor']
+							window.gltfFile.materials[j]['pbrMetallicRoughness']['roughnessFactor'] = exportedGLTF.materials[i]['pbrMetallicRoughness']['roughnessFactor']
+							window.gltfFile.materials[j]['pbrMetallicRoughness']['baseColorFactor'] = exportedGLTF.materials[i]['pbrMetallicRoughness']['baseColorFactor']
+							window.gltfFile.materials[j]['alphaMode'] = exportedGLTF.materials[i]['alphaMode']
+							window.gltfFile.materials[j]['doubleSided'] = exportedGLTF.materials[i]['doubleSided']
+							window.gltfFile.materials[j]['emissiveFactor'] = exportedGLTF.materials[i]['emissiveFactor']
+							window.gltfFile.materials[j]['alphaMode'] = exportedGLTF.materials[i]['alphaMode']
+							window.gltfFile.materials[j]['alphaCutoff'] = exportedGLTF.materials[i]['alphaCutoff']
 					}
-					
+				}
+				catch(e){
+					console.log(e)
 				}
 			}
 		}
